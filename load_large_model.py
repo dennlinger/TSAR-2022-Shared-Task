@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     model = load_checkpoint_and_dispatch(
         model, "/home/daumiller/gpt-neox-20b",
-        device_map="auto", max_memory={"0": "20GIB"},
+        device_map="auto", no_split_module_classes = ["GPTNeoXLayer"],
         offload_folder="/home/daumiller/gpt-offload/"
     )
 
