@@ -24,6 +24,9 @@ if __name__ == '__main__':
     with init_empty_weights():
         model = AutoModelForCausalLM.from_config(config)
 
-    model = load_checkpoint_and_dispatch(model, "gpt-neox-20b", device_map="auto", max_memory={"0": "20GIB"},
-                                         offload_folder="/home/daumiller/gpt-offload/")
+    model = load_checkpoint_and_dispatch(
+        model, "/home/daumiller/gpt-neox-20b",
+        device_map="auto", max_memory={"0": "20GIB"},
+        offload_folder="/home/daumiller/gpt-offload/"
+    )
 
