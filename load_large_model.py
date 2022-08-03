@@ -3,7 +3,7 @@ from transformers import GPTJForCausalLM, AutoTokenizer, pipeline, AutoConfig, A
 from accelerate import load_checkpoint_and_dispatch, init_empty_weights
 
 
-def load_6b_model():
+def run_6b_model():
     device = 1 if torch.cuda.is_available() else "cpu"
 
     model = GPTJForCausalLM.from_pretrained("EleutherAI/gpt-j-6B", revision="float16",
@@ -17,7 +17,7 @@ def load_6b_model():
     print(pipe(prompt, do_sample=True, temperature=0.6, max_length=20))
 
 
-if __name__ == '__main__':
+def run_20b_model():
     checkpoint = "EleutherAI/gpt-neox-20b"
     config = AutoConfig.from_pretrained(checkpoint)
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     model = load_checkpoint_and_dispatch(
         model, "/home/daumiller/gpt-neox-20b",
-        device_map="auto", no_split_module_classes = ["GPTNeoXLayer"],
+        device_map="auto", no_split_module_classes=["GPTNeoXLayer"],
         offload_folder="/home/daumiller/gpt-offload/"
     )
 
@@ -36,3 +36,24 @@ if __name__ == '__main__':
     output = model.generate(inputs["input_ids"])
     print(tokenizer.decode(output[0].tolist()))
 
+
+
+if __name__ == '__main__':
+
+    checkpoint = "facebook/opt-30b"
+    config = AutoConfig.from_pretrained(checkpoint)
+
+    with init_empty_weights():
+        model = AutoModelForCausalLM.from_config(config)
+
+    model = load_checkpoint_and_dispatch(
+        model, "/home/daumiller/opt-30b",
+        device_map="auto", no_split_module_classes=["OPTDecoderLayer"],
+        offload_folder="/home/daumiller/gpt-offload/"
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+    inputs = tokenizer("Find a synonym for the following word: compulsory\nSynonym:", return_tensors="pt")
+    inputs = inputs.to(0)
+    output = model.generate(inputs["input_ids"])
+    print(tokenizer.decode(output[0].tolist()))
