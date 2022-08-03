@@ -1,6 +1,6 @@
 import torch
 from transformers import GPTJForCausalLM, AutoTokenizer, pipeline, AutoConfig, AutoModelForCausalLM
-from accelerate import load_checkpoint_and_dispatch, init_empty_weights
+from accelerate import load_checkpoint_and_dispatch, init_empty_weights, infer_auto_device_map
 
 
 def run_6b_model():
@@ -37,7 +37,6 @@ def run_20b_model():
     print(tokenizer.decode(output[0].tolist()))
 
 
-
 if __name__ == '__main__':
 
     checkpoint = "facebook/opt-30b"
@@ -46,14 +45,16 @@ if __name__ == '__main__':
     with init_empty_weights():
         model = AutoModelForCausalLM.from_config(config)
 
-    model = load_checkpoint_and_dispatch(
-        model, "/home/daumiller/opt-30b",
-        device_map="auto", no_split_module_classes=["OPTDecoderLayer"],
-        offload_folder="/home/daumiller/gpt-offload/"
-    )
+    print(infer_auto_device_map(model, no_split_module_classes=["OPTDecoderLayer"]))
 
-    tokenizer = AutoTokenizer.from_pretrained(checkpoint)
-    inputs = tokenizer("Find a synonym for the following word: compulsory\nSynonym:", return_tensors="pt")
-    inputs = inputs.to(0)
-    output = model.generate(inputs["input_ids"])
-    print(tokenizer.decode(output[0].tolist()))
+    # model = load_checkpoint_and_dispatch(
+    #     model, "/home/daumiller/opt-30b",
+    #     device_map="auto", no_split_module_classes=["OPTDecoderLayer"],
+    #     offload_folder="/home/daumiller/gpt-offload/"
+    # )
+    #
+    # tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+    # inputs = tokenizer("Find a synonym for the following word: compulsory\nSynonym:", return_tensors="pt")
+    # inputs = inputs.to(0)
+    # output = model.generate(inputs["input_ids"])
+    # print(tokenizer.decode(output[0].tolist()))
