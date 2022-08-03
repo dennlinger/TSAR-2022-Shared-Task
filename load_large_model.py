@@ -34,5 +34,5 @@ if __name__ == '__main__':
     inputs = tokenizer("Find a synonym for the following word: compulsory\nSynonym:", return_tensors="pt")
     inputs = inputs.to(0)
     output = model.generate(inputs["input_ids"])
-    tokenizer.decode(output[0].tolist())
+    print(tokenizer.decode(output[0].tolist()))
 
