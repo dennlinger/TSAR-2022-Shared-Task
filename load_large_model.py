@@ -45,10 +45,9 @@ if __name__ == '__main__':
     with init_empty_weights():
         model = AutoModelForCausalLM.from_config(config)
 
-    # print(infer_auto_device_map(model, no_split_module_classes=["OPTDecoderLayer"]))
+    print(infer_auto_device_map(model, no_split_module_classes=["OPTDecoderLayer", "Embedding"]))
     # Based on the auto map, but extended with explicit mappings for error-causing layers.
     custom_opt_map = {
-        'decoder.embed_tokens.weight': 0,
         'model.decoder.embed_tokens': 0,
         'model.decoder.embed_positions': 0,
         'model.decoder.final_layer_norm': 0,
