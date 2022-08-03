@@ -48,8 +48,8 @@ if __name__ == '__main__':
     # print(infer_auto_device_map(model, no_split_module_classes=["OPTDecoderLayer"]))
     # Based on the auto map, but extended with explicit mappings for error-causing layers.
     custom_opt_map = {
+        'decoder.embed_tokens.weight': 0,
         'model.decoder.embed_tokens': 0,
-        'model.decoder.embed_tokens.weight': 0,
         'model.decoder.embed_positions': 0,
         'model.decoder.final_layer_norm': 0,
         'model.decoder.layers.0': 0,
