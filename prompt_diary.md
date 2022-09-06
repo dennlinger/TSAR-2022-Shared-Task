@@ -1,0 +1,143 @@
+Prompt diary:
+
+2022-09-05:
+Starting with simple generation from the CW alone with the hash trick.
+The default parameters of the playground were used:
+- text-davinci-002
+- temperature 0.7
+- maximum length 256
+- top p 1
+- freq penalty 0
+- presence penalty 0
+- best of 1
+- inject start text check
+- inject restart text check
+- show probs off
+Words in [] were suggested by the model, the rest was given as context.
+
+Query--SHA1:67ad81cc6913b587924bf5cd255b32ad413553bd
+Give me a synonym for the following word: compulsory
+
+Answer--SHA1:143dc0877d0f320aae86c00f6d42eb336c8b80eb
+mandatory
+
+Query--SHA1:67ad81cc6913b587924bf5cd255b32ad413553bd
+Give me a synonym for the following word: compulsory
+
+Answer--SHA1:66020d57278075ffb15532fa6cad30b67ee00521
+[required]
+
+Query--SHA1:67ad81cc6913b587924bf5cd255b32ad413553bd
+Give me a synonym for the following word: compulsory
+
+Answer--SHA1:45c7142a940fe50542d5c7669583864f26dbfc85
+[obligatory]
+
+
+2022-09-05:
+Prompting with the word alone and a request to generate X synonyms also works well and produces the same answers:
+
+Give me five synonyms for the following word: compulsory
+A:[ mandatory, obligatory, required, essential, needed]
+
+
+2022-09-05:
+Prompting with a given context in addition to requesting X "easier words".
+
+Context: Rajoy's conservative government had instilled markets with a brief dose of confidence by stepping into Bankia, performing a U-turn on its refusal to spend public money to rescue banks.
+Question: Find five easier words for "instilled" in the above context
+Answer:
+[
+1. Imparted
+2. Infused
+3. Injected
+4. Instilled
+5. Inserted
+]
+
+2022-09-05:
+Prompting without the context but the same Q prompt actually changes the predictions quite a bit, indicating awareness of the context to some degree:
+
+Question: Find five easier words for "instilled" in the above context
+Answer:
+[
+1. Taught
+2. Imparted
+3. Conveyed
+4. Communicated
+5. Transmitted
+]
+
+Fixing the prompt (without the "context cue") changes predictions again:
+
+
+Question: Find five easier words for "instilled".
+Answer:
+[
+1. imparted
+2. conveyed
+3. communicated
+4. transferred
+5. imparted
+]
+
+
+Asking GPT-3 for a "list of suggestion" does not produce consistent results when comparing it to the X listed synonyms.
+This may indicate that the best approach is actually to always ask for top-k (10) results and then just deduplicate and format the results.
+
+
+Also experimenting wit higher temperature, coupled with frequency and presence penalties:
+temp = 0.84, freq pen = 0.5, pres pen = 0.3
+Question: List ten substitutes for the word "instilled".
+Answer:
+[
+1. implanted
+2. ingrained
+3. inculcated
+4. infused
+5. imparted
+6. injected
+7. introduced
+8. implanted
+9. entrenched
+10. ingrained
+]
+
+
+Removing "Question" and "Answer" changes the list output format and no longer guarantees the number of responses!
+
+List ten substitutes for the word "instilled".
+Synonyms:
+[
+imparted, injected, infused, introduced, transmitted]
+
+
+
+
+As per the OpenAI documentation, it is recommended to change either temperature or top_p, but not both.
+They also recommend that one should resample (3-5 times)
+Other hints, such as giving post-fix clues, does not work for our case.
+
+
+For some of the later samples, it seems to matter on the wording whether single words are suggested, or rather synonymous descriptions (with mulitple words) are used.
+
+Context: An amateur video showed a young girl who apparently suffered shrapnel wounds in her thigh undergoing treatment in a makeshift Rastan hospital while screaming in pain.
+Question: Given the above context, list ten alternative words for "shrapnel" that are easier to understand.
+Answer: 1. Debris
+2. Fragments
+3. Splinters
+4. Pieces
+5. Atoms
+6. Particles
+7. Corpses
+8. Remains
+9. Rubble
+10. Wreckage
+
+
+Idea: Only use a reduced context to make it clearer.
+Result: Does not seem to improve it here.
+
+
+Other samples seem to struggle much more with the consistency of the output. Sometimes the 1-10 are not generated.
+Other times, the words make absolutely no sense, and are much more difficult to understand.
