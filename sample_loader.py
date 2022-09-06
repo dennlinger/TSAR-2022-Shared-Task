@@ -15,4 +15,5 @@ if __name__ == '__main__':
         target_word.append(split_line[1])
         alternative_suggestions.append(Counter(split_line[2:]))
 
-
+    for alternatives in alternative_suggestions:
+        print(len(alternatives))
