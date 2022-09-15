@@ -141,3 +141,37 @@ Result: Does not seem to improve it here.
 
 Other samples seem to struggle much more with the consistency of the output. Sometimes the 1-10 are not generated.
 Other times, the words make absolutely no sense, and are much more difficult to understand.
+
+
+
+22-09-15:
+
+
+
+Context: Syria's Sunni majority is at the forefront of the uprising against Assad, whose minority Alawite sect is an offshoot of Shi'ite Islam.
+Question: Give ten synonyms for the word "offshoot" in the above context that are easier to understand.
+Answer:
+1. branch
+2. outgrowth
+3. side shoot
+4. limb
+5. offset
+6. part
+7. side part
+8. spinoff
+9. derivative
+10. regroup
+
+Context: The daily death toll in Syria has declined as the number of observers has risen, but few experts expect the U.N. plan to succeed in its entirety.
+Question: Give ten synonyms for the word "observers" in the above context that are easier to understand.
+Answer:
+
+
+
+"Treating prompts like annotators:"
+Sampling a diverse set of suggestions by ensembling a prompted language model.
+
+
+As for the final experiments, we have one baseline run (zero-shot with context and conservative).
+As an alternative, we have an ensemble that aggregates over six different prompt types (zero shot with two different temperatures,
+zero-shot without context)
