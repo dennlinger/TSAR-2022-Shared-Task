@@ -18,8 +18,17 @@ def clean_predictions(text: str, given_word: str) -> List[str]:
     """
     Post-processing of files, by trying different strategies to coerce it into actual singular predictions.
     :param text: Unfiltered text predicted by a language model
+    :param given_word: The word that is supposed to be replaced. Sometimes appears in `text`.
     :return: List of individual predictions
     """
+
+    # Catch sample 248
+    if text.startswith(given_word):
+        text = text[len(given_word):]
+
+    # Clear additional clutter that might have been encountered
+    text = text.strip("\n :;.?!")
+
     # Presence of newlines within the prediction indicates prediction as list
     if "\n" in text.strip("\n "):
         cleaned_predictions = text.strip("\n ").split("\n")
@@ -27,6 +36,7 @@ def clean_predictions(text: str, given_word: str) -> List[str]:
     # Other common format contained comma-separated list without anything else
     elif "," in text.strip("\n "):
         cleaned_predictions = [pred.strip(" ") for pred in text.strip("\n ").split(",")]
+
 
     # Sometimes in-line enumerations also occur, this is a quick check to more or less guarantee
     # at least 6 enumerated predictions
@@ -178,7 +188,7 @@ def get_prompts_and_temperatures(context: str, word: str) -> List[Tuple[str, str
 if __name__ == '__main__':
     debug = False
     max_number_predictions = 10
-    continue_from = 22
+    continue_from = 302
 
     if debug:
         with open("datasets/trial/tsar2022_en_trial_none.tsv") as f:
