@@ -174,4 +174,23 @@ Sampling a diverse set of suggestions by ensembling a prompted language model.
 
 As for the final experiments, we have one baseline run (zero-shot with context and conservative).
 As an alternative, we have an ensemble that aggregates over six different prompt types (zero shot with two different temperatures,
-zero-shot without context)
+zero-shot without context, ...) that seems to do overall much better.
+
+Also trying to predict whether some of these methods are actually worth post-filtering?
+
+
+Stats about the ensemble:
+- 6 different prompts
+    - without context, zero-shot
+    - without context, single-shot
+    - with context, zero-shot (cold temperature)
+    - with context, zero-shot (warm temperature)
+    - with context, single-shot
+    - with context, few-shot (2 samples given)
+- Each prompt generates up to 10 samples, which are cleaned & filtered.
+- Weights are assigned by rank (5 - position * 0.5)
+- For the ensemble, weights are linearly accumulated and re-ranked accordingly.
+- We return the top 10 predictions of the sample by weights
+- Include concrete temperatures
+- Inference time for the ensemble through the OpenAI API takes ~15 seconds per sample (can be parallelized, probably down to ~3-5s)
+- Cost for inference per sample: 0.02$/1000 tokens. Each sample accounts for roughly 150 * 6 = 900 tokens, equaling about 0.018$
