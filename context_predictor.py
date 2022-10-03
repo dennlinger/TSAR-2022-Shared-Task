@@ -37,7 +37,6 @@ def clean_predictions(text: str, given_word: str) -> List[str]:
     elif "," in text.strip("\n "):
         cleaned_predictions = [pred.strip(" ") for pred in text.strip("\n ").split(",")]
 
-
     # Sometimes in-line enumerations also occur, this is a quick check to more or less guarantee
     # at least 6 enumerated predictions
     elif "1." in text and "6." in text:
@@ -261,6 +260,3 @@ if __name__ == '__main__':
         json.dump(baseline_predictions, f, ensure_ascii=False, indent=2)
     with open("ensemble_scores.json", "w") as f:
         json.dump(ensemble_predictions, f, ensure_ascii=False, indent=2)
-
-
-
