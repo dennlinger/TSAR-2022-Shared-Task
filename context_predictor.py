@@ -256,6 +256,7 @@ if __name__ == '__main__':
             print(f"{aggregated_predictions}")
             # break
 
+    # FIXME: This currently overwrites previously generated scores!!!
     with open("baseline_scores.json", "w") as f:
         json.dump(baseline_predictions, f, ensure_ascii=False, indent=2)
     with open("ensemble_scores.json", "w") as f:

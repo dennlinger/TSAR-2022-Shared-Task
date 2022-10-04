@@ -194,3 +194,9 @@ Stats about the ensemble:
 - Include concrete temperatures
 - Inference time for the ensemble through the OpenAI API takes ~15 seconds per sample (can be parallelized, probably down to ~3-5s)
 - Cost for inference per sample: 0.02$/1000 tokens. Each sample accounts for roughly 150 * 6 = 900 tokens, equaling about 0.018$
+
+
+Experimenting with examples for Spanish:
+
+What works: Give me ten simplified Spanish synonyms for the following word: <word>
+What doesn't work: Give me ten simplified synonyms in Spanish for the following word: <word>
