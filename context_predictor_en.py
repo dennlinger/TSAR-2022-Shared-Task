@@ -138,104 +138,67 @@ def assign_prediction_scores(predictions: List[str], start_weight: float = 5.0, 
 def get_prompts_and_temperatures(context: str, word: str) -> List[Tuple[str, str, float]]:
 
     zero_shot = f"Context: {context}\n" \
-                f"Question: Given the above context, list ten alternative Portuguese words for \"{word}\" that are easier to understand.\n" \
+                f"Question: Given the above context, list ten alternative Spanish words for \"{word}\" that are easier to understand.\n" \
                 f"Answer:"
 
-    no_context_zero_shot = f"Give me ten simplified Portuguese synonyms for the following word: {word}"
+    no_context_zero_shot = f"Give me ten simplified Spanish synonyms for the following word: {word}"
 
-    no_context_single_shot = f"Question: Find ten easier Portuguese words for \"atualmente\".\n" \
+    no_context_single_shot = f"Question: Find ten easier Spanish words for \"folclório\".\n" \
                              f"Answer:\n" \
-                             f"1. hoje\n2. hoje em dia\n3. na atualidade\n4. no momento\n5. presentemente\n" \
-                             f"6. agora\n7. no presente\n8. presente\n9. nesta época\n10. na época atual\n\n" \
-                             f"Question: Find ten easier Portuguese words for \"{word}\".\n" \
+                             f"1. popular\n2. tradicional\n3. local\n4. de folclore\n5. de musica folk\n" \
+                             f"6. costumbrista\n7. pintoresco\n8. típico\n9. de folclor\n10. típico\n" \
+                             f"Question: Find ten easier Spanish words for \"{word}\".\n" \
                              f"Answer:"
 
-    single_shot_prompt = f"Context: esse mecanismo é o equivalente geológico de um cobertor numa noite fria que " \
-                         f"aquece a atmosfera da terra retendo radiação do sol que de outro modo se dissiparia no espaço\n" \
-                         f"Question: Given the above context, list ten alternative Portuguese words for \"retendo\" that are easier to understand.\n" \
+    single_shot_prompt = f"Context: Además de partidos de fútbol americano, el estadio ha sido utilizado para una " \
+                         f"gran variedad de eventos, entre los que se destacan varios partidos de la selección " \
+                         f"nacional de fútbol de los Estados Unidos, y fue el hogar del ahora difunto club de la MLS, " \
+                         f"el Tampa Bay Mutiny.\n" \
+                         f"Question: Given the above context, list ten alternative Spanish words for \"difunto\" that are easier to understand.\n" \
                          f"Answer:\n" \
-                         f"1. guardando\n2. segurando\n3. conservando\n4. mantendo\n5. detendo\n6. absorvendo\n" \
-                         f"7. possuindo\n8. contendo\n9. trazendo\n10. prendendo\n\n\n"\
+                         f"1. muerto\n2. fallecido\n3. extinto\n4. inexistente\n5. finado\n6. desaparecido\n" \
+                         f"7. acabado\n8. inactivo\n9. tieso\n10. moribundo\n\n"\
                          f"Context: {context}\n" \
-                         f"Question: Given the above context, list ten alternative Portuguese words for \"{word}\" that are easier to understand.\n" \
+                         f"Question: Given the above context, list ten alternative Spanish words for \"{word}\" that are easier to understand.\n" \
                          f"Answer:"
 
-    few_shot_prompt = f"Context: bacci pretende oferecer recompensa a chamada delação premiada a bandidos que " \
-                      f"colaborarem com as investigações para desarticular as grandes quadrilhas\n" \
-                      f"Question: Given the above context, list ten alternative Portuguese words for \"desarticular\" that are easier to understand.\n" \
+    few_shot_prompt = f"Context: El texto denominado \"Lamentos de Ipuwer\" describe una situación caótica: reyes " \
+                      f"desacreditados, invasión asiática del Delta, desórdenes revolucionarios, destrucción de " \
+                      f"archivos y tumbas reales, ateísmo y divulgación de secretos religiosos.\n" \
+                      f"Question: Given the above context, list ten alternative Spanish words for \"desacreditados\" that are easier to understand.\n" \
                       f"Answer:\n" \
-                      f"1. desmontar\n2. separar\n3. destruir\n4. desfazer\n5. desencaixar\n6. desgastar\n" \
-                      f"7. exarticular\n8. luxate\n9. destroncar\n10. desconjuntar\n\n" \
-                      f"Context: naquele país a ave é considerada uma praga\n" \
-                      f"Question: Given the above context, list ten alternative Portuguese words for \"praga\" that are easier to understand.\n" \
+                      f"1. difamados\n2. desprestigiados\n3. malos\n4. desprestigiado\n5. afrentados\n" \
+                      f"6. demeritados\n7. desmentidos\n8. sin prestigio\n9. olvidados\n10. denigrados\n\n" \
+                      f"Context: Sufrió una importante reducción en su capacidad para poder acogerse a las normas de la FIFA para los estadios de fútbol.\n" \
+                      f"Question: Given the above context, list ten alternative Spanish words for \"acogerse\" that are easier to understand.\n" \
                       f"Answer:\n" \
-                      f"1. peste\n2. epidemia\n3. maldição\n4. doença\n5. tragédia\n6. desgraça\n7. infestação\n" \
-                      f"8. pestilência\n9. calamidade\n10.imprecação\n" \
+                      f"1. adaptarse\n2. sumarse\n3. incorporarse\n4. obedecer\n5. apegarse\n6. ampararse\n" \
+                      f"7. aceptar\n8. asimilarse\n9. aplicarse\n10. aceptarse\n\n" \
                       f"Context: {context}\n" \
-                      f"Question: Given the above context, list ten alternative Portuguese words for \"{word}\" that are easier to understand.\n" \
+                      f"Question: Given the above context, list ten alternative Spanish words for \"{word}\" that are easier to understand.\n" \
                       f"Answer:"
 
     # Mix between different methods
-    prompts = [("creative zero-shot with context", zero_shot, 0.8),
+    prompts = [("conservative zero-shot with context", zero_shot, 0.3),
+               ("creative zero-shot with context", zero_shot, 0.8),
                ("zero-shot without context", no_context_zero_shot, 0.7),
                ("single-shot without context", no_context_single_shot, 0.6),
                ("single-shot with context", single_shot_prompt, 0.5),
-               ("few-shot with context", few_shot_prompt, 0.5),
-               ("conservative zero-shot with context", zero_shot, 0.3)]
+               ("few-shot with context", few_shot_prompt, 0.5)]
 
     return prompts
 
 
-def prediction_loop(prompts, context, word, baseline_predictions, ensemble_predictions, max_number_predictions):
-    aggregated_predictions = []
-    for prompt_name, prompt, temperature in tqdm(prompts):
-        # Have not experimented too much with other parameters, but these generally worked well.
-        response = openai.Completion.create(
-            model="text-davinci-002",
-            prompt=prompt,
-            stream=False,
-            temperature=temperature,
-            max_tokens=256,
-            top_p=1,
-            best_of=1,
-            frequency_penalty=0.5,
-            presence_penalty=0.3
-        )
-        predictions = response["choices"][0]["text"]
-
-        predictions = clean_predictions(predictions, word)
-        weighted_predictions = assign_prediction_scores(predictions)
-        aggregated_predictions.extend(weighted_predictions)
-
-        # Store the "conservative zero-shot with context" predictions as a baseline run.
-        if prompt_name == "conservative zero-shot with context":
-            baseline_predictions.append(weighted_predictions)
-            with open("tsar2022_test_pt_UniHD_1.tsv", "a") as f:
-                prediction_string = "\t".join(predictions[:max_number_predictions])
-                f.write(f"{context}\t{word}\t{prediction_string}\n")
-
-    aggregated_predictions = deduplicate_predictions(aggregated_predictions)
-    highest_scoring_predictions = get_highest_predictions(aggregated_predictions, max_number_predictions)
-    with open("tsar2022_test_pt_UniHD_3.tsv", "a") as f:
-        prediction_string = "\t".join(highest_scoring_predictions[:max_number_predictions])
-        f.write(f"{context}\t{word}\t{prediction_string}\n")
-
-    ensemble_predictions.append(aggregated_predictions)
-
-    return baseline_predictions, ensemble_predictions, aggregated_predictions
-
-
 if __name__ == '__main__':
-
     debug = False
     max_number_predictions = 10
-    continue_from = 263
+    continue_from = 329
 
     if debug:
-        with open("datasets/trial/tsar2022_pt_trial_none.tsv") as f:
+        with open("datasets/trial/tsar2022_es_trial_none.tsv") as f:
             lines = f.readlines()
     else:
-        with open("datasets/test/tsar2022_pt_test_none.tsv") as f:
+        with open("datasets/test/tsar2022_es_test_none.tsv") as f:
             lines = f.readlines()
 
     openai.api_key = API_KEY
@@ -251,26 +214,51 @@ if __name__ == '__main__':
         if idx < continue_from:
             continue
 
+        aggregated_predictions = []
+
         # Extract context and complex word
         context, word = line.strip("\n ").split("\t")
 
         # Get "ensemble prompts"
         prompts_and_temps = get_prompts_and_temperatures(context, word)
 
-        try:
-            baseline_predictions, ensemble_predictions, agg = prediction_loop(prompts_and_temps, context, word,
-                                                                              baseline_predictions, ensemble_predictions,
-                                                                              max_number_predictions)
-        except ValueError:
-            print(f"Index {idx} failed on first try. Equals line {idx+1}")
-            # Just try again
-            baseline_predictions, ensemble_predictions, agg = prediction_loop(prompts_and_temps, context, word,
-                                                                              baseline_predictions, ensemble_predictions,
-                                                                              max_number_predictions)
+        for prompt_name, prompt, temperature in tqdm(prompts_and_temps):
+            # Have not experimented too much with other parameters, but these generally worked well.
+            response = openai.Completion.create(
+                model="text-davinci-002",
+                prompt=prompt,
+                stream=False,
+                temperature=temperature,
+                max_tokens=256,
+                top_p=1,
+                best_of=1,
+                frequency_penalty=0.5,
+                presence_penalty=0.3
+            )
+            predictions = response["choices"][0]["text"]
+
+            predictions = clean_predictions(predictions, word)
+            weighted_predictions = assign_prediction_scores(predictions)
+            aggregated_predictions.extend(weighted_predictions)
+
+            # Store the "conservative zero-shot with context" predictions as a baseline run.
+            if prompt_name == "conservative zero-shot with context":
+                baseline_predictions.append(weighted_predictions)
+                with open("tsar2022_test_es_UniHD_1.tsv", "a") as f:
+                    prediction_string = "\t".join(predictions[:max_number_predictions])
+                    f.write(f"{context}\t{word}\t{prediction_string}\n")
+
+        aggregated_predictions = deduplicate_predictions(aggregated_predictions)
+        highest_scoring_predictions = get_highest_predictions(aggregated_predictions, max_number_predictions)
+        with open("tsar2022_test_es_UniHD_3.tsv", "a") as f:
+            prediction_string = "\t".join(highest_scoring_predictions[:max_number_predictions])
+            f.write(f"{context}\t{word}\t{prediction_string}\n")
+
+        ensemble_predictions.append(aggregated_predictions)
 
         if debug:
             print(f"Complex word: {word}")
-            print(f"{agg}")
+            print(f"{aggregated_predictions}")
             # break
 
     # FIXME: This currently overwrites previously generated scores!!!

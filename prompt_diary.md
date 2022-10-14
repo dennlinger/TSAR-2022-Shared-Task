@@ -200,3 +200,6 @@ Experimenting with examples for Spanish:
 
 What works: Give me ten simplified Spanish synonyms for the following word: <word>
 What doesn't work: Give me ten simplified synonyms in Spanish for the following word: <word>
+~10$ for Spanish (longer sample texts, therefore more expensive.)
+Also includes minor testing on prompts and first failed run on .
+~6.50$ for Portuguese (short prompt for few-shot and shorter samples)

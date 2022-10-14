@@ -2,7 +2,7 @@ from collections import Counter
 
 
 if __name__ == '__main__':
-    with open("datasets/trial/tsar2022_es_trial_gold.tsv") as f:
+    with open("datasets/trial/tsar2022_pt_trial_gold.tsv") as f:
         lines = f.readlines()
 
     texts = []
