@@ -1,0 +1,123 @@
+\begin{thebibliography}{11}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{BigScience(2022)}]{bigscience-2022-bloom}
+Workshop BigScience. 2022.
+\newblock \href {https://doi.org/10.57967/hf/0003} {{BLOOM} (revision
+  4ab0472)}.
+
+\bibitem[{Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal,
+  Neelakantan, Shyam, Sastry, Askell, Agarwal, Herbert-Voss, Krueger, Henighan,
+  Child, Ramesh, Ziegler, Wu, Winter, Hesse, Chen, Sigler, Litwin, Gray, Chess,
+  Clark, Berner, McCandlish, Radford, Sutskever, and
+  Amodei}]{brown-etal-2020-language}
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared~D Kaplan, Prafulla
+  Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell,
+  Sandhini Agarwal, Ariel Herbert-Voss, Gretchen Krueger, Tom Henighan, Rewon
+  Child, Aditya Ramesh, Daniel Ziegler, Jeffrey Wu, Clemens Winter, Chris
+  Hesse, Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess,
+  Jack Clark, Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever,
+  and Dario Amodei. 2020.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf}
+  {Language models are few-shot learners}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, pages 1877--1901. Curran Associates, Inc.
+
+\bibitem[{Ferr{\'e}s et~al.(2017)Ferr{\'e}s, Saggion, and
+  G{\'o}mez~Guinovart}]{ferres-etal-2017-adaptable}
+Daniel Ferr{\'e}s, Horacio Saggion, and Xavier G{\'o}mez~Guinovart. 2017.
+\newblock \href {https://doi.org/10.18653/v1/W17-5406} {An adaptable lexical
+  simplification architecture for major {I}bero-{R}omance languages}.
+\newblock In \emph{Proceedings of the First Workshop on Building Linguistically
+  Generalizable {NLP} Systems}, pages 40--47, Copenhagen, Denmark. Association
+  for Computational Linguistics.
+
+\bibitem[{Qiang et~al.(2020)Qiang, Li, Yi, Yuan, and
+  Wu}]{qiang-etal-2020-lexical}
+Jipeng Qiang, Yun Li, Zhu Yi, Yunhao Yuan, and Xindong Wu. 2020.
+\newblock Lexical simplification with pretrained encoders.
+\newblock \emph{Thirty-Fourth AAAI Conference on Artificial Intelligence}, page
+  8649–8656.
+
+\bibitem[{Saggion et~al.(2022)Saggion, \v{S}tajner, Ferr{\'e}s, Sheang,
+  Shardlow, North, and Zampieri}]{tsar-2022-findings}
+Horacio Saggion, Sanja \v{S}tajner, Daniel Ferr{\'e}s, Kim~Cheng Sheang,
+  Matthew Shardlow, Kai North, and Marcos Zampieri. 2022.
+\newblock Findings of the tsar-2022 shared task on multilingual lexical
+  simplification.
+\newblock In \emph{Proceedings of TSAR workshop held in conjunction with EMNLP
+  2022}.
+
+\bibitem[{Sutton(2019)}]{sutton-2019-bitter}
+Richard Sutton. 2019.
+\newblock The bitter lesson.
+\newblock \emph{Incomplete Ideas (blog)}, 13:12.
+
+\bibitem[{Thoppilan et~al.(2022)Thoppilan, Freitas, Hall, Shazeer,
+  Kulshreshtha, Cheng, Jin, Bos, Baker, Du, Li, Lee, Zheng, Ghafouri, Menegali,
+  Huang, Krikun, Lepikhin, Qin, Chen, Xu, Chen, Roberts, Bosma, Zhou, Chang,
+  Krivokon, Rusch, Pickett, Meier{-}Hellstern, Morris, Doshi, Santos, Duke,
+  Soraker, Zevenbergen, Prabhakaran, Diaz, Hutchinson, Olson, Molina,
+  Hoffman{-}John, Lee, Aroyo, Rajakumar, Butryna, Lamm, Kuzmina, Fenton, Cohen,
+  Bernstein, Kurzweil, Aguera{-}Arcas, Cui, Croak, Chi, and
+  Le}]{thoppilan-etal-2022-lambda}
+Romal Thoppilan, Daniel~De Freitas, Jamie Hall, Noam Shazeer, Apoorv
+  Kulshreshtha, Heng{-}Tze Cheng, Alicia Jin, Taylor Bos, Leslie Baker, Yu~Du,
+  YaGuang Li, Hongrae Lee, Huaixiu~Steven Zheng, Amin Ghafouri, Marcelo
+  Menegali, Yanping Huang, Maxim Krikun, Dmitry Lepikhin, James Qin, Dehao
+  Chen, Yuanzhong Xu, Zhifeng Chen, Adam Roberts, Maarten Bosma, Yanqi Zhou,
+  Chung{-}Ching Chang, Igor Krivokon, Will Rusch, Marc Pickett, Kathleen~S.
+  Meier{-}Hellstern, Meredith~Ringel Morris, Tulsee Doshi, Renelito~Delos
+  Santos, Toju Duke, Johnny Soraker, Ben Zevenbergen, Vinodkumar Prabhakaran,
+  Mark Diaz, Ben Hutchinson, Kristen Olson, Alejandra Molina, Erin
+  Hoffman{-}John, Josh Lee, Lora Aroyo, Ravi Rajakumar, Alena Butryna, Matthew
+  Lamm, Viktoriya Kuzmina, Joe Fenton, Aaron Cohen, Rachel Bernstein, Ray
+  Kurzweil, Blaise Aguera{-}Arcas, Claire Cui, Marian Croak, Ed~H. Chi, and
+  Quoc Le. 2022.
+\newblock \href {http://arxiv.org/abs/2201.08239} {Lamda: Language models for
+  dialog applications}.
+\newblock \emph{CoRR}, abs/2201.08239.
+
+\bibitem[{Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones,
+  Gomez, Kaiser, and Polosukhin}]{vaswani-etal-2017-attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N. Gomez, Lukasz Kaiser, and Illia Polosukhin. 2017.
+\newblock \href
+  {https://proceedings.neurips.cc/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html}
+  {Attention is all you need}.
+\newblock In \emph{Advances in Neural Information Processing Systems 30: Annual
+  Conference on Neural Information Processing Systems 2017, December 4-9, 2017,
+  Long Beach, CA, {USA}}, pages 5998--6008.
+
+\bibitem[{\v{S}tajner et~al.(2022)\v{S}tajner, Ferr\'{e}s, Shardlow, North,
+  Zampieri, and Saggion}]{stajner-etal-2022-lexical}
+Sanja \v{S}tajner, Daniel Ferr\'{e}s, Matthew Shardlow, Kai North, Marcos
+  Zampieri, and Horacio Saggion. 2022.
+\newblock \href {https://doi.org/10.3389/frai.2022.991242} {{Lexical
+  simplification benchmarks for English, Portuguese, and Spanish}}.
+\newblock \emph{Frontiers in Artificial Intelligence}, 5.
+
+\bibitem[{Wei et~al.(2022)Wei, Tay, Bommasani, Raffel, Zoph, Borgeaud,
+  Yogatama, Bosma, Zhou, Metzler, Chi, Hashimoto, Vinyals, Liang, Dean, and
+  Fedus}]{wei-etal-2022-emergent}
+Jason Wei, Yi~Tay, Rishi Bommasani, Colin Raffel, Barret Zoph, Sebastian
+  Borgeaud, Dani Yogatama, Maarten Bosma, Denny Zhou, Donald Metzler, Ed~H.
+  Chi, Tatsunori Hashimoto, Oriol Vinyals, Percy Liang, Jeff Dean, and William
+  Fedus. 2022.
+\newblock \href {https://doi.org/10.48550/arXiv.2206.07682} {Emergent abilities
+  of large language models}.
+\newblock \emph{CoRR}, abs/2206.07682.
+
+\bibitem[{Zhang et~al.(2022)Zhang, Roller, Goyal, Artetxe, Chen, Chen, Dewan,
+  Diab, Li, Lin, Mihaylov, Ott, Shleifer, Shuster, Simig, Koura, Sridhar, Wang,
+  and Zettlemoyer}]{zhang-etal-2022-opt}
+Susan Zhang, Stephen Roller, Naman Goyal, Mikel Artetxe, Moya Chen, Shuohui
+  Chen, Christopher Dewan, Mona~T. Diab, Xian Li, Xi~Victoria Lin, Todor
+  Mihaylov, Myle Ott, Sam Shleifer, Kurt Shuster, Daniel Simig, Punit~Singh
+  Koura, Anjali Sridhar, Tianlu Wang, and Luke Zettlemoyer. 2022.
+\newblock \href {https://doi.org/10.48550/arXiv.2205.01068} {{OPT:} open
+  pre-trained transformer language models}.
+\newblock \emph{CoRR}, abs/2205.01068.
+
+\end{thebibliography}
