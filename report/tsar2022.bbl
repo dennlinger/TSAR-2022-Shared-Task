@@ -1,4 +1,4 @@
-\begin{thebibliography}{11}
+\begin{thebibliography}{14}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{BigScience(2022)}]{bigscience-2022-bloom}
@@ -33,6 +33,23 @@ Daniel Ferr{\'e}s, Horacio Saggion, and Xavier G{\'o}mez~Guinovart. 2017.
   Generalizable {NLP} Systems}, pages 40--47, Copenhagen, Denmark. Association
   for Computational Linguistics.
 
+\bibitem[{Lacoste et~al.(2019)Lacoste, Luccioni, Schmidt, and
+  Dandres}]{lacoste-etal-2019-quantifying}
+Alexandre Lacoste, Alexandra Luccioni, Victor Schmidt, and Thomas Dandres.
+  2019.
+\newblock \href {http://arxiv.org/abs/1910.09700} {Quantifying the carbon
+  emissions of machine learning}.
+\newblock \emph{CoRR}, abs/1910.09700.
+
+\bibitem[{Lester et~al.(2021)Lester, Al-Rfou, and
+  Constant}]{lester-etal-2021-power}
+Brian Lester, Rami Al-Rfou, and Noah Constant. 2021.
+\newblock \href {https://doi.org/10.18653/v1/2021.emnlp-main.243} {The power of
+  scale for parameter-efficient prompt tuning}.
+\newblock In \emph{Proceedings of the 2021 Conference on Empirical Methods in
+  Natural Language Processing}, pages 3045--3059, Online and Punta Cana,
+  Dominican Republic. Association for Computational Linguistics.
+
 \bibitem[{Qiang et~al.(2020)Qiang, Li, Yi, Yuan, and
   Wu}]{qiang-etal-2020-lexical}
 Jipeng Qiang, Yun Li, Zhu Yi, Yunhao Yuan, and Xindong Wu. 2020.
@@ -48,6 +65,14 @@ Horacio Saggion, Sanja \v{S}tajner, Daniel Ferr{\'e}s, Kim~Cheng Sheang,
   simplification.
 \newblock In \emph{Proceedings of TSAR workshop held in conjunction with EMNLP
   2022}.
+
+\bibitem[{Schick and Sch{\"u}tze(2021)}]{schick-schutze-2021-generating}
+Timo Schick and Hinrich Sch{\"u}tze. 2021.
+\newblock \href {https://doi.org/10.18653/v1/2021.emnlp-main.555} {Generating
+  datasets with pretrained language models}.
+\newblock In \emph{Proceedings of the 2021 Conference on Empirical Methods in
+  Natural Language Processing}, pages 6943--6951, Online and Punta Cana,
+  Dominican Republic. Association for Computational Linguistics.
 
 \bibitem[{Sutton(2019)}]{sutton-2019-bitter}
 Richard Sutton. 2019.

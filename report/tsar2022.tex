@@ -35,6 +35,12 @@
 \usepackage{amsmath}
 \usepackage{cleveref}
 
+
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{color}
+\usepackage{soul}
+
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 \newcommand{\n}{$\backslash$n}
 
@@ -46,7 +52,7 @@
 %
 % and set <dim> to something 5cm or larger.
 
-\title{UniHD at TSAR-2022 Shared Task:\\ Is Compute All We Need for Lexical Simplification?}
+\title{UniHD at TSAR-2022 Shared Task:\\ Is ``Compute All We Need''` for Lexical Simplification?}
 
 % Author information can be set in various styles:
 % For several authors from the same institution:
@@ -76,48 +82,62 @@ Previous state-of-the-art models for lexical simplification consist of complex p
 As an alternative, we describe a frustratingly simple pipeline based on prompted GPT-3 responses, beating competing approaches by a wide margin in settings with few training instances.
 Our best-performing submission to the English language track of the TSAR-2022 shared task consists of an ``ensemble'' of six different prompt templates with varying context levels. As a late-breaking result, we further detail a language transfer technique that allows simplification in languages other than English. Applied to the Spanish and Portuguese subset, we achieve state-of-the-art results with only minor modification to the original prompts.
 Aside from detailing the implementation and setup, we spend the remainder of this work discussing the particularities of prompting and implications for future work.
+Code for the experiments is available online.\footnote{\url{https://github.com/dennlinger/TSAR-2022-Shared-Task}}
 \end{abstract}
 
 \section{Introduction}
 With recent advancements in Machine Learning (ML) research coming largely from increasing compute budgets, Richard Sutton coined the idea of a ``bitter lesson'', wherein more computational power will ultimately supersede a hand-crafted solution~\cite{sutton-2019-bitter}.
-More recently, increasing compute on a general purpose architecture has also shown to be wildly successful in the Natural Language Processing (NLP) community~\cite{vaswani-etal-2017-attention,wei-etal-2022-emergent}.
-In particular, emergent capabilities in very large language models (vLLMs) have made it possible to approach a variety of tasks wherein only few (if any) samples are provided with labels, and no further fine-tuning on task-specific data is required at all.\\
-In stark contrast to the complex setup required for modern lexical simplification systems~\cite{ferres-etal-2017-adaptable,qiang-etal-2020-lexical,stajner-etal-2022-lexical}, we present a simplistic pipeline based on simply prompting a vLLM with basic instructions on simplification, which returns frustratingly good results considering the overall complexity of the approach.
-Results at the TSAR-2022 shared task~\cite{tsar-2022-findings} rank our model as the best-performing one on the English subset, indicate that this approach may be another instance of the bitter lesson.\\
-While the initial findings are indeed promising, we want to cautiously evaluate erroneous instances on the test set to analyze potential pitfalls, and further detail some of our experiences in crafting prompts for context-dependent prediction tasks.
-Furthermore, we acknowledge the technical challenges in reproducing (and productionizing) systems based on vLLMs, especially given that suitable models exceed traditional computing budgets.
+More recently, increasing compute power on a general purpose architecture has also shown to be wildly successful in the Natural Language Processing (NLP) community~\cite{vaswani-etal-2017-attention,wei-etal-2022-emergent}.
+In particular, emergent capabilities in very large language models (vLLMs) have made it possible to approach a variety of tasks wherein only few (if any) samples are labeled, and no further fine-tuning on task-specific data is required at all.\\
+In stark contrast to the complex pipelines in modern lexical simplification systems~\cite{ferres-etal-2017-adaptable,qiang-etal-2020-lexical,stajner-etal-2022-lexical}, we present a simplistic approach utilizing few-shot prompts based on a vLLM with basic instructions on simplification, which returns frustratingly good results considering the overall complexity of the approach, which utilizes a grand total of four hand-labeled instances.
+We present our results on the TSAR-2022 shared task~\cite{tsar-2022-findings}, which evaluates lexical simplification systems in three available languages (English, Spanish and Portuguese), with ten labeled instances and around 350 unlabeled test samples provided per language.
+For the English subset, official results rank our model as the best-performing submission, indicating that this approach may be another instance of the bitter lesson.\\
+While the initial findings are indeed promising, we want to carefully evaluate erroneous instances on the test set to analyze potential pitfalls, and further detail some of our experiences in hand-crafting prompts.
+We also acknowledge the technical challenges in reproducing (and deploying) systems based on vLLMs, especially given that suitable models exceed traditional computing budgets.
 
-\todo{somewhere I need to actually mention more details on the TSAR shared task and task data!! This could be enough content for a Background/Rel Work section?}
+%\todo{somewhere I need to actually mention more details on the TSAR shared task and task data!! This could be enough content for a Background/Rel Work section?}
 
 \section{Prompt-based Lexical Simplification}
-\todo{Write about what the general idea is for this model.}
-Touted as the ~\todo{insert flashy phrase, such as ``human-level AI''}, the GPT-3 model released by OpenAI~\cite{brown-etal-2020-language} has been the first in a series of available vLLMs for general-purpose text generation~ \cite{thoppilan-etal-2022-lambda,bigscience-2022-bloom,zhang-etal-2022-opt}. Across these models, a general trend in scaling beyond a particular parameter size can be observed, while keeping the underlying architectural design close to existing smaller models~\todo{maybe cite something}.
-Through exhibiting zero-shot transfer capabilities, such models have also become more attractive for lower-resourced tasks. Often, models are able to answer questions formulated in natural language with somewhat sensible results. Particular template patterns (so-called \emph{prompts}) are frequently used to guide models towards predicting a particularly desirable output or answer format.
+%\todo{Write about what the general idea is for this model.}
+%Touted as the ~\todo{insert flashy phrase, such as ``human-level AI''},
+With the public release of the GPT-3 language model~\cite{brown-etal-2020-language}, OpenAI has started the run on a series of now-available vLLMs for general-purpose text generation~ \cite{thoppilan-etal-2022-lambda,bigscience-2022-bloom,zhang-etal-2022-opt}. Across these models, a general trend in scaling beyond a particular parameter size can be observed, while keeping the underlying architectural design close to existing smaller models.
+Through exhibiting zero-shot transfer capabilities, such models have also become more attractive for lower-resourced tasks; oftentimes, models are able to answer questions formulated in natural language with somewhat sensible results. Particular template patterns (so-called \emph{prompts}) are frequently used to guide models towards predicting a particularly desirable output or answer format, without requiring a dedicated training on labeled examples.
 
-\noindent Using this paradigm, we experimented with different prompts issued to OpenAI's largest available model, \texttt{text-davinici-002}, which totals 176B parameters.
+\noindent Utilizing this paradigm shift, we experimented with different prompts issued to OpenAI's largest available model, \texttt{text-davinici-002}, which totals 176B parameters.
 Our first approach uses a singular prompt template in a zero-shot setting to obtain predictions for the shared task; we further improve upon these results by combining predictions from different prompt templates later on.
 %For the final prompts used in our submission, please refer to \Cref{sec:prompts}. We also detail any further hyperparameters and filtering steps used in the pipeline.
 %Furthermore, we submitted two different runs for the TSAR 2022 shared task, for which we will detail the differences below.
 
 \subsection{Run 1: Zero-shot Prediction}
-As a baseline system with a performance indication that is realistic for 
-\todo{Here, we explain the basic setup of the prompting approach, and detail basic hyperparameters (ten responses per prompt that we ask the system to report).}
-\todo{Also explain why we use the particular zero-shot prompting approach. Primarily also say that we are limited in the compute budget and the evaluation strategies on trial data with few-shot approaches. We estimate that this serves as a reasonable ``lower-bound'' submission. This is especially the case if we only consider pure zero-context approaches for some of the models}
+Upon inspecting the provided trial data, we noted that the simplification operations required a vastly different contextualization within the provided sample sentence. Whereas some instances can be solved with pure synonym look-ups (e.g., ``compulsory'' and ``mandatory''), others require a more nuanced look at the context sentence (e.g., replacing ``disguised'' with ``dressed'').
+To avoid biasing system predictions by providing samples as a prompt template, we provide a baseline that is entirely based on a single zero-shot query; it provides the context sentence and identifies the complex word, asking the model for ten simplified synonyms of the complex word in the given context.
+Given that no additional knowledge is provided to the model, the zero-shot contextual query also provides a reasonable lower-bound for the task setting.
+A secondary advantage of minimal provided context in zero-shot settings is the reduced computational cost, which will be discussed in more detail in 
+\Cref{sec:budget}.
+%As a baseline system with a performance indication that is realistic for 
+%\todo{Here, we explain the basic setup of the prompting approach, and detail basic hyperparameters (ten responses per prompt that we ask the system to report).}
+%\todo{Also explain why we use the particular zero-shot prompting approach. Primarily also say that we are limited in the compute budget and the evaluation strategies on trial data with few-shot approaches. We estimate that this serves as a reasonable ``lower-bound'' submission. This is especially the case if we only consider pure zero-context approaches for some of the models}
 
 \subsection{Filtering Predictions}
-Generated suggestions generally are mostly returned as a comma-separated list or enumeration with line breaks. However, in our experience a clear pattern cannot be expected from the model and seems to be non-deterministic even with set template structures. We parse available outputs in the known formats and re-run samples with differing structures, which seems to resolve the issue in our case. Additionally, we employ a list of simple filters to ensure the quality of predictions, as detailed in \Cref{sec:filters}.
+Model suggestions are returned as free-form text predictions, generally in the form of comma-separated lists or enumerations.
+This requires the additional step of parsing the output prediction into the more structured ranked predictions required for the shared task, which varies between the models used.
+In our experience, no clear pattern can be expected from the model and seems to be non-deterministic even with set template structures.
+%We parse available outputs in the known formats and re-run samples with differing structures, which seems to resolve the issue in our case.
+We additionally employ a list of simple filters to ensure the quality of predictions, as detailed in \Cref{sec:filters}.
+The resulting model suggestions are considered in ranked order, and no prediction confidence scores or similar information was used to re-rank single-prompt predictions.
+
 
 \subsection{Run 2: Ensemble Predictions}
 Upon inspecting the results from the first run, we noticed that in some instances, predictions were almost fully discarded due to filtering.
-Simultaneously, we had already previously encountered strong variance in system generations when varying the prompt template or altering the context setting.
+Simultaneously, we had already previously encountered strong variability in system generations when changing the prompt template or altering the context setting.
 To this extent, an ensemble of predictions from multiple different prompt templates was utilized to broaden the spectrum of possible generations, as well as ensuring that a minimum number of suggestions survives the filtering step.
 
-\subsubsection{Prompt Variants}
+\subsubsection{Prompt Variations}
 
 The exact prompts are detailed in \Cref{tab:prompts}.
-Utilized template variants can be grouped into \emph{with context} (the context sentence is provided), or \emph{without context} (synonyms are generated from the complex word alone).
-Simultaneously, different prompts also contain between zero and two examples taken from the trial data, including their expected outputs. This can be interpreted as a few-shot setting in which the model is demonstrated on what correct answers may look like for this particular task.
-Aside from this, we vary the generation temperature, where a higher temperature increases the likelihood of a potentially more creative (but not always correct) prediction.
+Utilized variations can be grouped into \emph{with context} (the context sentence is provided), or \emph{without context} (synonyms are generated from the complex word alone).
+Simultaneously, different prompts also contain between zero and two examples taken from the trial data, including their expected outputs. This can be interpreted as a few-shot setting in which the model is demonstrated on what correct answers may look like for the particular task.
+We further vary the generation temperature, where a higher value increases the likelihood of a more creative (but not always correct) prediction, enabling a more diverse candidate set.
 
 \subsubsection{Combining Predictions}
 
@@ -126,6 +146,8 @@ For each of the six prompts $p$, we ask the model to suggest ten alternative sim
 	V(s) = \sum_p \text{max}(5.5 - 0.5 \cdot \text{rank}_{S_p}(s), 0),
 \end{align}
 where $\text{rank}_{S_p}(s)$ is the ranked position of suggestion $s$ in the resulting ranking from prompt $p$. If $s \notin S_p$, we set $\text{rank}_{S_p}(s) = \infty$. The scaling parameters are chosen arbitrarily and can be adjusted to account for the expected number of suggestions per prompt.
+We estimate that the biggest performance improvement is coming simply from providing enough predictions post filtering.
+As a secondary gain, we see more consistent behavior in the top-most prediction slots, boosting especially the @1 performance of the ensemble.
 
 
 
@@ -150,22 +172,89 @@ TUNER & 0.3404 & 0.1420 & 0.1689 & 0.1823 & 0.1706 & 0.1087 & 0.0546 & 0.4343 & 
 \end{table*}
 
 
-\section{Error Analysis and Limitations}
+\section{Results and Limitations}
 
-As with other sequence-to-sequence tasks, the output of a vLLM cannot be guaranteed to be entirely correct at all times.
-In this section, we detail some of the particular challenges we have encountered during the design process.
+\subsection{Results for English}
+For the official runs, we initially only submitted predictions for the English subset; an excerpt of the results can be seen in \Cref{tab:english}.
+While the zero-shot single prompt run has consistently better results on most metrics, it does not outperform all systems for large candidate sets; e.g., Potential@10 is lower than that of competing approaches, including the LSBert baseline.
+We attribute this to the previously mentioned issue of filtering predictions, and can see a consequent improvement especially for larger $k$ by using the proposed ensemble method. Here, the Potential@10 scores indicate that at least one viable prediction is present in \emph{all but three samples}.
 
-\subsection{Computational Budgeting}
-Running a vLLM in practice, even for inference-only settings, is non-trivial and requires compute that is far beyond many public institution's hardware budget. For the largest models with publicly available checkpoints\footnote{At the time of writing, this would be the 176B Bloom model~\todo{cite}, which has a similar parameter count to OpenAI's davinci-002 model.}, a total of around \textbf{325GB GPU memory} is required, assuming efficient storage in \texttt{bfloat16} or similar precision levels.\\
+\subsection{Results for Spanish and Portuguese}
+Given the surprisingly good results on the English subset, we decided to extend our experiments to the Spanish and Portuguese tracks as well.
+% Given that we did not submit any original runs, we did not include them in the main body of the paper.
+Transferring the prompts to Spanish or Portuguese is surprisingly simple. We alter the prompt to:
+\emph{``Given the above context, list ten alternative \textbf{Spanish} words for `\texttt{complex\_word}' that are easier to understand.''} (bold highlight indicates change).\\
+Without this adaption, returned suggestions generally tend to be in English, which could be an attractive opportunity to mine cross-lingual simplifications in future work. By adding the output language explicitly, we ensure that the suggestions match the expected results.
+For Portuguese, the prompt can be adapted accordingly.
+
+\noindent We find that our system also outperforms all competing submitted approaches in the shared task; result comparisons can be found in \Cref{tab:spanish} and \ref{tab:portuguese} in the Appendix, respectively.
+Notably, predictions for Portuguese perform slightly better, which goes against intuition, given that Spanish is usually a highly represented language in multilingual corpora.
+We suspect that a more literal wording of synonyms in Portuguese, compared to multi-word expressions in Spanish, could be the cause.
+
+\subsection{Error Analysis}
+
+
+\begin{table*}[ht]
+	\hspace*{-0.35cm}
+	\setlength{\tabcolsep}{4pt}
+	\centering
+	\begin{tabular}{l|l|l}
+		\textbf{Error Type} & \textbf{Context (complex word in bold)} & \textbf{Model Predictions} \\
+		\hline
+		\textbf{Lack of Context} & \makecell[l]{\#7-8 Despite the fog, other flights are reported\\to have landed safely leading up to the \textbf{collision}.} & car crash, train wreck, ... \\
+		\hline
+		\textbf{Hallucinations} & \makecell[l]{The larva grows to about 120-130 mm,\\and \textbf{pupates} in an underground chamber.} & Transforms into a pupa, ... \\
+		\hline
+		\textbf{Language} & \makecell[l]{[...] propiciado la \textbf{decadencia} de la Revolución francesa.} & decline, deterioration, ...
+	\end{tabular}
+	\caption{Instances of observed failure classes in our system's predictions.}
+	\label{tab:failures}
+\end{table*}
+
+As is common for sequence-to-sequence tasks, crafting an approach centered around a LM requires consideration of the particular challenges arising.
+We detail some of the errors we have encountered in our predictions that are unlikely to appear in more stringently designed pipelines.
+Instances for particular failure cases can be found in \Cref{tab:failures}.
+
+\paragraph{Unstable Prompts}
+One of the primary challenges, particularly for zero-shot prompt settings, is the unreasonable variance observed in results based on even just slightly altered prompt templates.
+For example, when removing the explicit mention of \emph{Context:}, \emph{Question:} and \emph{Answer:} in the prompt template, the model is frequently predicting fewer than the ten requested answers.
+Practical limitations in our computational budget also mean that we have no guarantee that these prompts are yielding the best possible results; given the variability, multiple runs should be compared for a thorough pattern of a ``best'' prompt.
+
+\paragraph{Lack of Context}
+Instances with longer (or subtly enforced) context cues show issues where these hints are not properly recognized. In \Cref{tab:failures}, we can see the model changing the term ``\emph{collision}'' to a particular mode of transportation, such as ``\emph{car crash}'', while an explicit context clue is given through the word ``\emph{flight}'' in the original sentence.
+
+\paragraph{Enforcing Language}
+While the transfer to Spanish and Portuguese is largely successful, the model's capabilities seem to be still limited in maintaining the language throughout all samples. For instances with particularly rare complex terms, the predictions are sometimes still in English, despite the specific prompt request to return Spanish/Portuguese results.
+
+\paragraph{Hallucinations}
+The necessity for post-filtering of suggestions stems largely from the spontaneous occurrence of hallucinations in responses. While hallucinations in vLLMs are less about invalid vocabulary terms, we observe instances where unnecessary multi-word suggestions were returned, or random inflections (such as the infinitive form with an additional ``to'') were generated.\\
+Similar to the issues with language enforcing, this occurs more frequently with particularly complex words; in this sense, the system conversely fails at instances that are most in need of simplification.
+However, we note that some of the generated multi-word expressions are actually more helpful for understanding, even though the generations are not precisely matching expected outputs.
+
+
+%\todo{Include table with 2-3 samples where predictions go wrong. In particular, mention slight variance in prompts leading to completely different outputs, or other samples where the predictions are just garbage.}
+
+
+
+\subsection{Computational Limitations}
+\label{sec:budget}
+Running a vLLM in practice, even for inference-only settings, is non-trivial and requires compute resources that are far beyond many public institution's hardware budget. For the largest models with publicly available checkpoints\footnote{At the time of writing, this would be the 176B Bloom model~\cite{bigscience-2022-bloom}, which has a similar parameter count to OpenAI's davinci-002 model.}, a total of around \textbf{325GB GPU memory} is required, assuming efficient storage in \texttt{bfloat16} or similar precision levels.
 The common alternative is to obtain predictions through a (generally paid) API, as was the case in this work. Especially for the ensemble model, which issues six individual requests to the API per sample, this can further bloat the net cost of a single prediction.
 To give context of the total cost, we incurred a total charge of slightly over \$7 for computing predictions across the entire test set of 373 English samples, which comes out to about 1000 tokens per sample, or around \$0.02 at the current OpenAI pricing scheme.\footnote{\url{https://openai.com/api/pricing/}, last accessed: 2022-10-01}
 For the Spanish subset and language-dependent prompt development, the total cost came to about \$10, primarily due to longer sample contexts. Costs for Portuguese processing were around \$6.50.
-Aside from monetary concerns, environmental impacts are also to be considered for larger-scale deployments of this kind~\todo{cite the environmental paper everyone brings up}.
+While the singular prompt approach is cheaper at around 1/6 of the total cost, even then a continuously deployed model has to be supplied with a large enough budget.
+Aside from monetary concerns, environmental impacts are also to be considered for larger-scale deployments of this kind~\cite{lacoste-etal-2019-quantifying}.
+
 
 
 \section{Conclusion and Future Work}
-\todo{Maybe ask Matthew/organizers if we can actually get the predictions for the baselines? This way, we could compare the approaches. The context paper also mentions a few instances, so maybe look there?}
-Utilizing prompted responses from vLLMs seems to be 
+%\todo{Maybe ask Matthew/organizers if we can actually get the predictions for the baselines? This way, we could compare the approaches. The context paper also mentions a few instances, so maybe look there?}
+Utilizing prompted responses from vLLMs seems to be a promising direction for lexical simplification; particularly in the constrained setting with pre-identified complex words the model performs exceptionally well, even when presented with a severely restricted budget of labeled training data.
+While the approach also offers promising directions for multi- and cross-lingual approaches, obtaining state-of-the-art results in other languages, we are presented with a prohibitive amount of computation per sample instance.
+It would therefore be an interesting addition to deal with resource-constraint systems, putting the prediction power into a slightly different perspective.
+Finally, we are also reminded of the unpredictable nature of neural LMs; given similar inputs, prediction quality can vary greatly between samples, including a complete breakdown in performance.\\
+For future work, we are considering approaches to generate static resources from vLLMs~\cite{schick-schutze-2021-generating}, which may require only a one-time commitment to spending on datasets, which can then used as training data for cheaper systems.
+Exploration of prompt tuning approaches for automated search of suitable prompt templates would also greatly accelerate the development process of domain-specific applications~\cite{lester-etal-2021-power}.
 
 
 %%%%%%%%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -173,12 +262,13 @@ Utilizing prompted responses from vLLMs seems to be
 \bibliographystyle{acl_natbib}
 
 \appendix
+\newpage
 
 \section{Prompt Templates}
 \label{sec:prompts}
 
-\Cref{tab:prompts} provides the exact prompt templates used in the submission. Notably, the \emph{zero-shot with context} prompt is included twice, but with different generation temperatures~\todo{mention which ones, or link to the hyperparameter table?}.
-For few-shot prompts, we have taken samples from the previously published trial set for the respective language. In instances where less than 10 distinctly different suggestions were provided by annotators, we manually extended the list of examples to match exactly ten results based on our own judgment. For instances with more provided suggestions, we limit ourselves to the ten most frequently occurring ones. The reason for this is that GPT-3 otherwise tended to return an inconsistent number of suggestions in our preliminary testing.
+\Cref{tab:prompts} provides the exact prompt templates used in the submission. Notably, the \emph{zero-shot with context} prompt is included twice, but with different generation temperatures; with this we increase the likelihood of strong candidates being retained.
+For few-shot prompts, we have taken samples from the previously published trial set for the respective language. In instances where less than 10 distinctly different suggestions were provided by annotators, we manually extended the list of examples to match exactly ten results based on our own judgment. For instances with more provided suggestions, we limit ourselves to the ten most frequently occurring ones. The reason for this is that GPT-3 otherwise tended to return an inconsistent number of suggestions in our preliminary testing. The exact prompts for the Spanish and Portuguese runs can be found in our repository.
 
 \begin{table*}
 	\sloppy
@@ -244,7 +334,7 @@ For few-shot prompts, we have taken samples from the previously published trial 
 \end{table*}
 
 \section{Hyperparameters}
-We use the OpenAI Python package\footnote{\todo{Insert package URL}}, version 0.23.0 for our experiments. For generation, the function \texttt{openai.Completion.create()} is used, where most hyperparameters remain fixed across all prompts. We explicitly list those hyperparameters below that differ from the default values.
+We use the OpenAI Python package\footnote{\url{https://github.com/openai/openai-python}} version 0.23.0 for our experiments. For generation, the function \texttt{openai.Completion.create()} is used, where most hyperparameters remain fixed across all prompts. We explicitly list those hyperparameters below that differ from their respective default values.
 \begin{enumerate}
 	\item \texttt{model="text-davinci-002"}, which is the latest and biggest available model for text completion.
 	\item \texttt{max\_tokens=256}, to ensure sufficient room for generated outputs. In practice, most completions are vastly below the limit.
@@ -255,16 +345,7 @@ We use the OpenAI Python package\footnote{\todo{Insert package URL}}, version 0.
 
 \section{Post-Filtering Operations}
 \label{sec:filters}
-Given the uncertain nature of predictions by a language model, we employ a series of post-filtering steps to ensure high quality outputs. This includes stripping newlines/spaces/punctuation (\texttt{$\backslash$n :;.?!}), lower-casing, removing infinitive forms (``to deploy'' instead of ``deploy'' as a prediction), as well as removing identity predictions (e.g., the prediction being the same as the original complex word) and deduplicating suggestions. Additionally, we noticed that for some instances, generated synonyms resemble more of a ``description'' rather than truly synonymous expressions (example: ``people that are crazy'' as a suggestion for ``maniacs''). Given the nature of provided data, we removed extreme multi-word expressions (for English, any suggestion with more than two words, for Spanish and Portuguese more than three words in a single expression).
-
-\section{Results for Spanish and Portuguese}
-Given the surprisingly good results on the English subset, we decided to extend our experiments to the Spanish and Portuguese tracks as well. Given that we did not submit any original runs, we did not include them in the main body of the paper.
-Transferring the prompts to Spanish or Portuguese is surprisingly simple. We alter the prompt to:\\
-\emph{``Given the above context, list ten alternative \textbf{Spanish} words for `\texttt{complex\_word}' that are easier to understand.''} (bold highlight indicates change)\\
-Without this change, returned suggestions generally tend to be in English, which could be an attractive opportunity to mine cross-lingual simplifications in future work. By adding the output language explicitly, we ensure that the suggestions match the expected results.
-For Portuguese, the prompt can be adapted accordingly.
-
-\noindent We find that our system also outperforms all competing submitted approaches in the shared task; result comparisons can be found in \Cref{tab:spanish} and \Cref{tab:portuguese}, respectively.
+Given the uncertain nature of predictions by a language model, we employ a series of post-filtering steps to ensure high quality outputs. This includes stripping newlines/spaces/punctuation (\texttt{$\backslash$n :;.?!}), lower-casing, removing infinitive forms (in some instances, we observed predictions in the form of ``to deploy'' instead of simply ``deploy''), as well as removing identity predictions (e.g., the prediction being the same as the original complex word) and deduplicating suggestions. Additionally, we noticed that for some instances, generated synonyms resemble more of a ``description'' rather than truly synonymous expressions (example: ``people that are crazy'' as a suggestion for ``maniacs''). Given the nature of provided data, we removed extreme multi-word expressions (for English, any suggestion with more than two words, for Spanish and Portuguese more than three words in a single expression).
 
 \begin{table*}
 	\hspace*{-0.35cm}
@@ -303,7 +384,7 @@ For Portuguese, the prompt can be adapted accordingly.
 		LSBert & 0.3262 & 0.1577 & 0.2326 & 0.286 & 0.1904 & 0.1313 & 0.0775 & 0.4946 & 0.5802 & 0.6737\\
 		TUNER & 0.2219 & 0.1336 & 0.1604 & 0.1604 & 0.1005 & 0.0623 & 0.0311 & 0.2673 & 0.2673 & 0.2673
 	\end{tabular}
-	\caption{Results on the Portuguese language test set of the TSAR-2022 shared task, ranked by \emph{ACC@1} scores. Listed are our own results (\emph{Ensemble} and  \emph{Single}), the two best-performing competing systems~(\emph{MANTIS} and \emph{UoM\&MMU}), as well as provided baselines (\emph{LSBert}~\cite{qiang-etal-2020-lexical} and TUNER~\cite{ferres-etal-2017-adaptable}).}
+	\caption{Results on the Portuguese language test set of the TSAR-2022 shared task, ranked by \emph{ACC@1} scores. Listed are our own results (\emph{Ensemble} and  \emph{Single}), the two best-performing competing systems~(\emph{GMU-WLV} and \emph{Cental}), as well as provided baselines (\emph{LSBert}~\cite{qiang-etal-2020-lexical} and TUNER~\cite{ferres-etal-2017-adaptable}).}
 	\label{tab:portuguese}
 \end{table*}
 
