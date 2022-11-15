@@ -52,7 +52,7 @@
 %
 % and set <dim> to something 5cm or larger.
 
-\title{UniHD at TSAR-2022 Shared Task:\\ Is ``Compute All We Need''` for Lexical Simplification?}
+\title{UniHD at TSAR-2022 Shared Task:\\ Is Compute All We Need for Lexical Simplification?}
 
 % Author information can be set in various styles:
 % For several authors from the same institution:
@@ -152,11 +152,11 @@ As a secondary gain, we see more consistent behavior in the top-most prediction 
 
 
 \begin{table*}
-	\hspace*{-0.35cm}
-	\setlength{\tabcolsep}{4pt}
+	\hspace*{-0.25cm}
+	\setlength{\tabcolsep}{3pt}
 \centering
 \begin{tabular}{l|c|ccc|ccc|ccc}
- 	&       & \multicolumn{3}{|c|}{\textbf{Acc@k@Top1}} & \multicolumn{3}{c|}{\textbf{MAP@k}} & \multicolumn{3}{c}{\textbf{Potential@k}}\\
+ 	&       & \multicolumn{3}{c|}{\textbf{Acc@k@Top1}} & \multicolumn{3}{c|}{\textbf{MAP@k}} & \multicolumn{3}{c}{\textbf{Potential@k}}\\
 \textbf{Run} & \textbf{ACC@1} & $k=1$ & $k=2$ & $k=3$ & $k=3$ & $k=5$ & $k=10$ & $k=3$ & $k=5$ & $k=10$\\
 \hline
 Ensemble (Ours) & \textbf{0.8096} & \textbf{0.4289} & \textbf{0.6112} & \textbf{0.6863} & \textbf{0.5834} & \textbf{0.4491} & \textbf{0.2812} & \textbf{0.9624} & \textbf{0.9812} & \textbf{0.9946}\\
@@ -227,7 +227,7 @@ Instances with longer (or subtly enforced) context cues show issues where these 
 While the transfer to Spanish and Portuguese is largely successful, the model's capabilities seem to be still limited in maintaining the language throughout all samples. For instances with particularly rare complex terms, the predictions are sometimes still in English, despite the specific prompt request to return Spanish/Portuguese results.
 
 \paragraph{Hallucinations}
-The necessity for post-filtering of suggestions stems largely from the spontaneous occurrence of hallucinations in responses. While hallucinations in vLLMs are less about invalid vocabulary terms, we observe instances where unnecessary multi-word suggestions were returned, or random inflections (such as the infinitive form with an additional ``to'') were generated.\\
+The necessity for post-filtering of suggestions stems largely from the spontaneous occurrence of hallucinations in responses. While hallucinations in vLLMs are less about invalid vocabulary terms, we observe instances where unnecessary multi-word suggestions were chosen over a simple synonymous single-word expression, or random inflections (such as the infinitive form with an additional ``to'') were generated.\\
 Similar to the issues with language enforcing, this occurs more frequently with particularly complex words; in this sense, the system conversely fails at instances that are most in need of simplification.
 However, we note that some of the generated multi-word expressions are actually more helpful for understanding, even though the generations are not precisely matching expected outputs.
 
@@ -252,7 +252,7 @@ Aside from monetary concerns, environmental impacts are also to be considered fo
 Utilizing prompted responses from vLLMs seems to be a promising direction for lexical simplification; particularly in the constrained setting with pre-identified complex words the model performs exceptionally well, even when presented with a severely restricted budget of labeled training data.
 While the approach also offers promising directions for multi- and cross-lingual approaches, obtaining state-of-the-art results in other languages, we are presented with a prohibitive amount of computation per sample instance.
 It would therefore be an interesting addition to deal with resource-constraint systems, putting the prediction power into a slightly different perspective.
-Finally, we are also reminded of the unpredictable nature of neural LMs; given similar inputs, prediction quality can vary greatly between samples, including a complete breakdown in performance.\\
+Finally, we are reminded of the unstable nature of neural LMs; given similar inputs, quality can vary greatly between samples, including a complete breakdown in performance.\\
 For future work, we are considering approaches to generate static resources from vLLMs~\cite{schick-schutze-2021-generating}, which may require only a one-time commitment to spending on datasets, which can then used as training data for cheaper systems.
 Exploration of prompt tuning approaches for automated search of suitable prompt templates would also greatly accelerate the development process of domain-specific applications~\cite{lester-etal-2021-power}.
 
@@ -272,53 +272,54 @@ For few-shot prompts, we have taken samples from the previously published trial 
 
 \begin{table*}
 	\sloppy
-	\hspace*{-2em}
+	\hspace*{-0.95em}
+	\setlength{\tabcolsep}{2pt}
 	\begin{tabular}{|l|l|}
 		\hline
 		\textbf{Prompt Type} & \textbf{Template} \\
 		\hline
-		\textbf{Zero-shot with context} & \texttt{Context: \{context\_sentence\}\n} \\
+		\textbf{Zero-shot /w context} & \texttt{Context: \{context\_sentence\}\n} \\
 		temperature: 					   & \texttt{Question: Given the above context, list ten alternatives for} \\
 		0.3 (conservative),					   & \texttt{    ``\{complex\_word\}'' that are easier to understand.\n} \\
 		0.8 (creative)					   &\texttt{Answer:} \\
 							   
 		\hline
 		\hline
-		\textbf{Single-shot with context} & \texttt{Context: A local witness said a separate group of attackers disguised}\\
-		temperature: 0.5						& \texttt{    in burqas — the head-to-toe robes worn by conservative Afghan women —}\\
-								& \texttt{    then tried to storm the compound.\n}\\
-								& \texttt{Question: Given the above context, list ten alternative words for}\\
-								& \texttt{    ``disguised'' that are easier to understand.\n}\\
+		\textbf{Single-shot /w context} & \texttt{Context: A local witness said a separate group of attackers}\\
+		temperature: 0.5		& \texttt{ disguisedin burqas — the head-to-toe robes worn by conservative}\\
+								& \texttt{ Afghan women — then tried to storm the compound.\n}\\
+								& \texttt{Question: Given the above context, list ten alternative words }\\
+								& \texttt{ for ``disguised'' that are easier to understand.\n}\\
 								& \texttt{Answer:\n1. concealed\n2. dressed\n3. hidden\n4. camouflaged\n}\\
-								& \texttt{    5. changed\n6. covered\n7. masked\n8. unrecognizable\n9. converted\n}\\
-								& \texttt{    10. impersonated\n\n}\\
+								& \texttt{    5. changed\n6. covered\n7. masked\n8. unrecognizable\n}\\
+								& \texttt{ 9. converted\n10. impersonated\n\n}\\
 								& \texttt{Context: \{context\_sentence\}\n} \\
 								& \texttt{Question: Given the above context, list ten alternatives for} \\
 								& \texttt{    ``\{complex\_word\}'' that are easier to understand.\n} \\
 								&\texttt{Answer:} \\
 		\hline
-		\textbf{Two-shot with context}  & \texttt{Context: That prompted the military to deploy its largest warship, }\\
-		temperature: 0.5& \texttt{the BRP Gregorio del Pilar, which was recently acquired from the }\\
-		& \texttt{United States.\n}\\
-		& \texttt{Question: Given the above context, list ten alternative words for }\\
-		& \texttt{``deploy'' that are easier to understand.\n}\\
+		\textbf{Two-shot /w context}  & \texttt{Context: That prompted the military to deploy its largest }\\
+		temperature: 0.5& \texttt{warship, the BRP Gregorio del Pilar, which was recently }\\
+		& \texttt{acquired from the United States.\n}\\
+		& \texttt{Question: Given the above context, list ten alternative words }\\
+		& \texttt{ for ``deploy'' that are easier to understand.\n}\\
 		& \texttt{Answer:\n1. send\n2. post\n3. use\n4. position\n5. send out\n}\\
-		& \texttt{6. employ\n7. extend\n8. launch\n9. let loose\n10. organize\n\n}\\
-		& \texttt{Context: The daily death toll in Syria has declined as the number of }\\
-		& \texttt{observers has risen, but few experts expect the U.N. plan to succeed }\\
-		& \texttt{in its entirety.\n}\\
-		& \texttt{Question: Given the above context, list ten alternative words for }\\
-		& \texttt{``observers'' that are easier to understand.\n}\\
+		& \texttt{ 6. employ\n7. extend\n8. launch\n9. let loose\n10. organize\n\n}\\
+		& \texttt{Context: The daily death toll in Syria has declined as the}\\
+		& \texttt{ number of observers has risen, but few experts expect the }\\
+		& \texttt{ U.N. plan to succeed in its entirety.\n}\\
+		& \texttt{Question: Given the above context, list ten alternative words }\\
+		& \texttt{ for ``observers'' that are easier to understand.\n}\\
 		& \texttt{Answer:\n1. watchers\n2. spectators\n3. audience\n4. viewers\n}\\
-		& \texttt{5. witnesses\n6. patrons\n7. followers\n8. detectives\n9. reporters\n}\\
-		& \texttt{10. onlookers\n\n}\\
+		& \texttt{ 5. witnesses\n6. patrons\n7. followers\n8. detectives\n}\\
+		& \texttt{ 9. reporters\n10. onlookers\n\n}\\
 		& \texttt{Context: \{context\_sentence\}\n} \\
 		& \texttt{Question: Given the above context, list ten alternatives for} \\
 		& \texttt{    ``\{complex\_word\}'' that are easier to understand.\n} \\
 		&\texttt{Answer:} \\
 		\hline
-		\textbf{Zero-shot w/o context} & \texttt{Give me ten simplified synonyms for the following word: \{complex\_word\}} \\
-		temperature: 0.7 & \\
+		\textbf{Zero-shot w/o context} & \texttt{Give me ten simplified synonyms for the following word:} \\
+		temperature: 0.7 & \texttt{\{complex\_word\}} \\
 		\hline
 		\textbf{Single-shot w/o context} & \texttt{Question: Find ten easier words for ``compulsory''.\n} \\
 		temperature: 0.6						    & \texttt{Answer:\n1. mandatory\n2. required\n3. essential\n4. forced\n}\\
@@ -329,7 +330,7 @@ For few-shot prompts, we have taken samples from the previously published trial 
 		\hline
 		
 	\end{tabular}
-	\caption{The English prompt templates used for querying the OpenAI model, including associated generation temperatures. Only written out ``\texttt{\n}'' symbols indicate newlines, visible line breaks are inserted for better legibility. Only top-most prompt template with conservative temperature was used in the single prompt (Run 1), as well as in the ensemble run (Run 2). All other prompts` were only included in the ensemble submission.}
+	\caption{The English prompt templates used for querying the OpenAI model, including associated generation temperatures. Only written out ``\texttt{\n}'' symbols indicate newlines, visible line breaks are inserted for better legibility. Only top-most prompt template with conservative temperature was used in the single prompt (Run 1), as well as in the ensemble run (Run 2). All other prompts were only included in the ensemble submission.}
 	\label{tab:prompts}
 \end{table*}
 
@@ -349,10 +350,10 @@ Given the uncertain nature of predictions by a language model, we employ a serie
 
 \begin{table*}
 	\hspace*{-0.35cm}
-	\setlength{\tabcolsep}{4pt}
+	\setlength{\tabcolsep}{3pt}
 	\centering
 	\begin{tabular}{l|c|ccc|ccc|ccc}
-		&       & \multicolumn{3}{|c|}{\textbf{Acc@k@Top1}} & \multicolumn{3}{c|}{\textbf{MAP@k}} & \multicolumn{3}{c}{\textbf{Potential@k}}\\
+		&       & \multicolumn{3}{c|}{\textbf{Acc@k@Top1}} & \multicolumn{3}{c|}{\textbf{MAP@k}} & \multicolumn{3}{c}{\textbf{Potential@k}}\\
 		\textbf{Run} & \textbf{ACC@1} & $k=1$ & $k=2$ & $k=3$ & $k=3$ & $k=5$ & $k=10$ & $k=3$ & $k=5$ & $k=10$\\
 		\hline
 		Ensemble (Ours) & \textbf{0.6521} & \textbf{0.3505} & \textbf{0.5108} & \textbf{0.5788} & \textbf{0.4281} & \textbf{0.3239} & \textbf{0.1967} & \textbf{0.8206} & \textbf{0.8885} & \textbf{0.9402}\\
@@ -370,10 +371,10 @@ Given the uncertain nature of predictions by a language model, we employ a serie
 
 \begin{table*}
 	\hspace*{-0.35cm}
-	\setlength{\tabcolsep}{4pt}
+	\setlength{\tabcolsep}{3pt}
 	\centering
 	\begin{tabular}{l|c|ccc|ccc|ccc}
-		&       & \multicolumn{3}{|c|}{\textbf{Acc@k@Top1}} & \multicolumn{3}{c|}{\textbf{MAP@k}} & \multicolumn{3}{c}{\textbf{Potential@k}}\\
+		&       & \multicolumn{3}{c|}{\textbf{Acc@k@Top1}} & \multicolumn{3}{c|}{\textbf{MAP@k}} & \multicolumn{3}{c}{\textbf{Potential@k}}\\
 		\textbf{Run} & \textbf{ACC@1} & $k=1$ & $k=2$ & $k=3$ & $k=3$ & $k=5$ & $k=10$ & $k=3$ & $k=5$ & $k=10$\\
 		\hline
 		Ensemble (Ours) & \textbf{0.7700} & \textbf{0.4358} & \textbf{0.5347} & \textbf{0.6229} & \textbf{0.5014} & \textbf{0.3620} & \textbf{0.2167} & \textbf{0.9171} & \textbf{0.9491} & \textbf{0.9786}\\
