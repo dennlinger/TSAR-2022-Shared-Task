@@ -1,4 +1,11 @@
-# TSAR-2022-Shared-Task Datasets and Evaluation Scripts
+# UniHD at TSAR-2022 Shared Task: Is Compute All We Need for Lexical Simplification?
+
+This repository contains the modifications made by our team for the (winning) entry in the English shared task category.
+We further include modifications made for Spanish and Portuguese, obtaining SotA in those languages as well.
+
+
+
+# Original README: TSAR-2022-Shared-Task Datasets and Evaluation Scripts
 TSAR2022 Shared Task on Lexical Simplification for English (en), Spanish (es) and Portuguese (pt) - Datasets and Evaluation scripts
 
 Please look at the website of the Shared Task for more details about the Evaluation Benchmark, Guidelines, Registration Form, etc...
