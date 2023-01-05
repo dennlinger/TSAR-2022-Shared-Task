@@ -3,6 +3,21 @@
 This repository contains the modifications made by our team for the (winning) entry in the English shared task category.
 We further include modifications made for Spanish and Portuguese, obtaining SotA in those languages as well.
 
+**Find the arXiv version of our paper here: https://arxiv.org/abs/2301.01764**
+
+In case you find these results useful, please consider citing our work in addition to the shared task paper (see below).
+
+```
+@article{aumiller-gertz-2023-unihd,
+author = {Aumiller, Dennis and Chouhan, Ashish and Gertz, Michael},
+title = {{UniHD at TSAR-2022 Shared Task: Is Compute All We Need for Lexical Simplification?}},
+journal = {CoRR},
+volume = {abs/2301.01764},
+eprinttype = {arXiv},
+eprint = {2301.01764},
+url = {https://arxiv.org/abs/2301.01764}
+}
+```
 
 
 # Original README: TSAR-2022-Shared-Task Datasets and Evaluation Scripts
