@@ -274,7 +274,7 @@ if __name__ == '__main__':
             # break
 
     # FIXME: This currently overwrites previously generated scores!!!
-    with open("baseline_scores_es.json", "w") as f:
+    with open("baseline_scores_pt.json", "w") as f:
         json.dump(baseline_predictions, f, ensure_ascii=False, indent=2)
-    with open("ensemble_scores_es.json", "w") as f:
+    with open("ensemble_scores_pt.json", "w") as f:
         json.dump(ensemble_predictions, f, ensure_ascii=False, indent=2)
