@@ -229,7 +229,7 @@ if __name__ == '__main__':
 
     debug = False
     max_number_predictions = 10
-    continue_from = 263
+    continue_from = 0
 
     if debug:
         with open("datasets/trial/tsar2022_pt_trial_none.tsv") as f:
