@@ -20,6 +20,16 @@ url = {https://arxiv.org/abs/2301.01764}
 ```
 
 
+## Setup for Reproduction
+To run the results for the respective subsets, you need to provide your own OpenAI API key in a file named `config.py`. A template can be found in `config.py.template`, which already contains the correct variable name and structure.
+
+Other required packages can be installed with `python3 -m pip install -r requirements.txt` from the main repository folder.
+
+Our predictions submitted to the workshop can be found either in the subfolder `en/`, or the fiel `UniHD.zip`. Later additions of the Spanish and Portuguese predictions are in the respective folders `es/` (for Spanish) and `pt/` (Portuguese).
+
+An exact reproduction of the system outputs may not be possible, as the generation temperature and other, server-side factors, such as the random seed, can potentially lead to differing predictions. In our experience, there is no possibility of fixing a particular prediction to occur with 100% likelihood.
+We also do not make any promises that the used prompt templates work with later models. In our experiments, we used the (relatively "outdated" `text-davinci-002` model, which may respond differently to prompt variants than later additions.
+
 # Original README: TSAR-2022-Shared-Task Datasets and Evaluation Scripts
 TSAR2022 Shared Task on Lexical Simplification for English (en), Spanish (es) and Portuguese (pt) - Datasets and Evaluation scripts
 
