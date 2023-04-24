@@ -192,7 +192,7 @@ def get_prompts_and_temperatures(context: str, word: str) -> List[Tuple[str, str
 if __name__ == '__main__':
     debug = False
     max_number_predictions = 10
-    continue_from = 329
+    continue_from = 0
 
     if debug:
         with open("datasets/trial/tsar2022_es_trial_none.tsv") as f:
