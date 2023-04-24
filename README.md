@@ -9,7 +9,7 @@ In case you find these results useful, please consider citing our work in additi
 
 ```
 @article{aumiller-gertz-2023-unihd,
-author = {Aumiller, Dennis and Chouhan, Ashish and Gertz, Michael},
+author = {Aumiller, Dennis and Gertz, Michael},
 title = {{UniHD at TSAR-2022 Shared Task: Is Compute All We Need for Lexical Simplification?}},
 journal = {CoRR},
 volume = {abs/2301.01764},
